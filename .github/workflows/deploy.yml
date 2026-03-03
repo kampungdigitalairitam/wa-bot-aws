@@ -1,0 +1,28 @@
+name: Deploy WA Bot to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd wa-bot-aws
+            # Buang perubahan lokal jika ada (biar nggak error saat pull)
+            git fetch --all
+            git reset --hard origin/main
+            # Update dependency
+            source venv/bin/activate
+            pip install -r requirements.txt
+            # Restart bot dengan PM2
+            pm2 restart wa-bot || pm2 start venv/bin/python --name "wa-bot" -- main.py
+            pm2 save
