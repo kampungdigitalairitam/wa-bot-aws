@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env
+
+# WhatsApp Session (PENTING: Jangan di-push ke GitHub)
+session.db
+session.db-shm
+session.db-wal
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
